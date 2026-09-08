@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { APP_URL } from "@/lib/site";
+
 const CTA_VIDEO =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260306_074215_04640ca7-042c-45d6-bb56-58b1e8a42489.mp4";
 
@@ -32,12 +34,12 @@ export function Cta() {
         </p>
 
         <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
-          <Link
-            href="#contact"
+          <a
+            href={APP_URL}
             className="liquid-glass rounded-full px-10 py-4 text-sm text-foreground transition-transform hover:scale-[1.03]"
           >
-            Get Started Free
-          </Link>
+            Get Started
+          </a>
           <Link
             href="#contact"
             className="rounded-full border border-border px-10 py-4 text-sm text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"

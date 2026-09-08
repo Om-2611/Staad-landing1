@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import CardSwap, { Card } from "@/components/velorah/card-swap";
+import { ModuleGallery } from "@/components/velorah/module-gallery";
 import { PageShell } from "@/components/velorah/page-shell";
 import {
   CtaBand,
@@ -140,43 +142,56 @@ export default function ModulesPage() {
         />
       </Section>
 
-      {CATEGORIES.map((category) => (
-        <Section
-          key={category.name}
-          id={category.name.toLowerCase().replace(/[^a-z]+/g, "-")}
-          eyebrow={`${category.index} · ${category.name}`}
-          title={
-            <>
-              <span aria-hidden="true" className="mr-3">
-                {category.icon}
-              </span>
-              {category.name}
-            </>
-          }
-          lede={category.lede}
-        >
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {category.modules.map((module) => (
-              <article
-                key={module.name}
-                className="rounded-2xl border border-border bg-card p-8 transition-colors hover:border-white/25"
-              >
-                <h3 className="mb-3 text-xl tracking-[-0.5px] text-foreground [font-family:var(--font-velorah-serif)]">
-                  {module.name}
-                </h3>
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  {module.body}
-                </p>
-              </article>
-            ))}
-          </div>
-        </Section>
-      ))}
+      <Section
+        id="modules"
+        eyebrow="01 · The library"
+        title="Every module in one deck."
+        lede="Twelve interactive activities. Click the top card to bring up the next one."
+      >
+        <div className="card-swap-centered relative mx-auto h-[560px] w-full max-w-5xl sm:h-[680px] lg:h-[780px]">
+          <CardSwap
+            width={620}
+            height={420}
+            cardDistance={34}
+            verticalDistance={26}
+            autoPlay={false}
+          >
+            {CATEGORIES.flatMap((category) =>
+              category.modules.map((module) => (
+                <Card key={`${category.name} · ${module.name}`}>
+                  <article className="flex h-full flex-col justify-center p-12">
+                    <p className="mb-4 text-xs uppercase tracking-[0.3em] text-white/60">
+                      <span aria-hidden="true" className="mr-2">
+                        {category.icon}
+                      </span>
+                      {category.name}
+                    </p>
+                    <h3 className="mb-4 text-4xl leading-[1.05] tracking-[-1px] text-white [font-family:var(--font-velorah-serif)]">
+                      {module.name}
+                    </h3>
+                    <p className="text-base leading-relaxed text-white/70">
+                      {module.body}
+                    </p>
+                  </article>
+                </Card>
+              )),
+            )}
+          </CardSwap>
+        </div>
+      </Section>
 
-      <Section eyebrow="05 · General Therapy" title="In development.">
+      <Section eyebrow="02 · General Therapy" title="In development.">
         <p className="max-w-3xl text-base leading-relaxed text-muted-foreground">
           {IN_DEVELOPMENT.join(" · ")}
         </p>
+      </Section>
+
+      <Section
+        eyebrow="03 · Gallery"
+        title="Inside the modules."
+        lede="Drag to spin the dome, then tap any tile to open it."
+      >
+        <ModuleGallery />
       </Section>
 
       <CtaBand
