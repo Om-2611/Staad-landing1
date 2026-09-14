@@ -10,6 +10,7 @@ import {
   Section,
   StatRow,
 } from "@/components/velorah/page-sections";
+import { APP_URL } from "@/lib/site";
 
 const MODULES_VIDEO =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_074625_a81f018a-956b-43fb-9aee-4d1508e30e6a.mp4";
@@ -101,18 +102,6 @@ const CATEGORIES: {
       },
     ],
   },
-];
-
-const IN_DEVELOPMENT = [
-  "Emotion Wheel",
-  "Safe Space Builder",
-  "Defusion River",
-  "Thought Challenger",
-  "Micro Quest Board",
-  "Values Card Sort",
-  "Urge Surfing",
-  "Worry Vault",
-  "Facts vs Feelings",
 ];
 
 export default function ModulesPage() {
@@ -207,16 +196,10 @@ export default function ModulesPage() {
         </Section>
       </div>
 
-      <Section eyebrow="02 · General Therapy" title="In development.">
-        <p className="max-w-3xl text-base leading-relaxed text-muted-foreground">
-          {IN_DEVELOPMENT.join(" · ")}
-        </p>
-      </Section>
-
       <Section
-        eyebrow="03 · Gallery"
+        eyebrow="02 · Gallery"
         title="Inside the modules."
-        lede="Drag to spin the dome, then tap any tile to open it."
+        lede="Drag through the deck, or pick a card to bring it to the front."
       >
         <ModuleGallery />
       </Section>
@@ -224,7 +207,7 @@ export default function ModulesPage() {
       <CtaBand
         title="Explore the modules"
         body="Every module is built for a specific condition, and appears on both screens the moment a therapist launches it."
-        primary={{ label: "Get Started Free", href: "#contact" }}
+        primary={{ label: "Get Started", href: APP_URL }}
         secondary={{ label: "See the platform", href: "/platform" }}
       />
     </PageShell>

@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import { PageShell } from "@/components/velorah/page-shell";
 import { PageHeader, Section } from "@/components/velorah/page-sections";
+import { cn } from "@/lib/utils";
 
 const COMPANY_VIDEO =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4";
@@ -30,34 +31,64 @@ const FOUNDERS = [
 
 type Collaborator = {
   name: string;
-  role: string;
+  /** A longer-form name or title, where the short name needs expanding. */
+  role?: string;
   body: string;
   /** Omitted where no asset has been supplied yet — a monogram stands in. */
   logo?: string;
 };
 
-const COLLABORATORS: Collaborator[] = [
+type CollaboratorGroup = {
+  heading: string;
+  members: Collaborator[];
+};
+
+/**
+ * Cards divide their group's full width evenly, so every row is filled edge to
+ * edge whether the group holds one collaborator or two. Keyed by member count
+ * and written out in full — Tailwind scans for literal class names, so these
+ * can't be built by interpolation.
+ */
+const GROUP_COLUMNS: Record<number, string> = {
+  1: "",
+  2: "sm:grid-cols-2",
+};
+
+const COLLABORATOR_GROUPS: CollaboratorGroup[] = [
   {
-    name: "HIIC",
-    role: "HITAM Innovation & Incubation Center",
-    body: "Staad's incubator — the programme supporting the platform's early build and its route to practitioners.",
-    logo: "/partners/hiic.jpg",
+    heading: "Incubators",
+    members: [
+      {
+        name: "HIIC",
+        role: "HITAM Innovation & Incubation Center",
+        body: "Staad's incubator — the programme supporting the platform's early build and its route to practitioners.",
+        logo: "/partners/hiic.jpg",
+      },
+      {
+        name: "HITAM",
+        role: "Hyderabad Institute of Technology and Management",
+        body: "The institution Staad grew out of, and its base in Hyderabad.",
+        logo: "/partners/hitam.jpg",
+      },
+    ],
   },
   {
-    name: "HITAM",
-    role: "Hyderabad Institute of Technology and Management",
-    body: "The institution Staad grew out of, and its base in Hyderabad.",
-    logo: "/partners/hitam.jpg",
+    heading: "Partner organisation",
+    members: [
+      {
+        name: "Skillworld Foundation",
+        body: "Working with Staad to bring structured, interactive therapy sessions to the people they support.",
+      },
+    ],
   },
   {
-    name: "Skillworld Foundation",
-    role: "Partner organisation",
-    body: "Working with Staad to bring structured, interactive therapy sessions to the people they support.",
-  },
-  {
-    name: "Dr. Sangita Sharad",
-    role: "Clinical advisor",
-    body: "Guides the clinical design of Staad's therapeutic modules and how they are used in session.",
+    heading: "Clinical advisor",
+    members: [
+      {
+        name: "Dr. Sangita Sharad",
+        body: "Guides the clinical design of Staad's therapeutic modules and how they are used in session.",
+      },
+    ],
   },
 ];
 
@@ -73,7 +104,7 @@ function Monogram({ name }: { name: string }) {
   return (
     <div
       aria-hidden="true"
-      className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-border text-2xl text-muted-foreground [font-family:var(--font-velorah-serif)]"
+      className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-border text-lg text-muted-foreground [font-family:var(--font-velorah-serif)]"
     >
       {initials}
     </div>
@@ -136,41 +167,54 @@ export default function CompanyPage() {
         eyebrow="Collaborations"
         title="Built with people who know the work."
       >
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {COLLABORATORS.map((collaborator) => (
-            <article
-              key={collaborator.name}
-              className="flex h-full flex-col gap-6 rounded-2xl border border-border bg-card p-8 transition-colors hover:border-white/25"
-            >
-              {collaborator.logo ? (
-                // The supplied logos are artwork on white, so they get a white
-                // tile rather than being dropped straight onto the black page.
-                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-white p-3">
-                  <Image
-                    src={collaborator.logo}
-                    alt={`${collaborator.name} logo`}
-                    width={200}
-                    height={200}
-                    sizes="80px"
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-              ) : (
-                <Monogram name={collaborator.name} />
-              )}
+        <div className="space-y-8">
+          {COLLABORATOR_GROUPS.map((group) => (
+            <div key={group.heading}>
+              <h3 className="mb-3 text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                {group.heading}
+              </h3>
 
-              <div>
-                <h3 className="text-xl tracking-[-0.5px] text-foreground [font-family:var(--font-velorah-serif)]">
-                  {collaborator.name}
-                </h3>
-                <p className="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  {collaborator.role}
-                </p>
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                  {collaborator.body}
-                </p>
+              <div className={cn("grid gap-3", GROUP_COLUMNS[group.members.length])}>
+                {group.members.map((collaborator) => (
+                  <article
+                    key={collaborator.name}
+                    className="flex h-full items-start gap-4 rounded-2xl border border-border bg-card p-5 transition-colors hover:border-white/25"
+                  >
+                    {collaborator.logo ? (
+                      // The supplied logos are artwork on white, so they get a
+                      // white tile rather than being dropped straight onto the
+                      // black page.
+                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-white p-2">
+                        <Image
+                          src={collaborator.logo}
+                          alt={`${collaborator.name} logo`}
+                          width={200}
+                          height={200}
+                          sizes="56px"
+                          className="h-full w-full object-contain"
+                        />
+                      </div>
+                    ) : (
+                      <Monogram name={collaborator.name} />
+                    )}
+
+                    <div className="min-w-0">
+                      <h4 className="text-base tracking-[-0.3px] text-foreground [font-family:var(--font-velorah-serif)]">
+                        {collaborator.name}
+                      </h4>
+                      {collaborator.role ? (
+                        <p className="mt-0.5 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                          {collaborator.role}
+                        </p>
+                      ) : null}
+                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                        {collaborator.body}
+                      </p>
+                    </div>
+                  </article>
+                ))}
               </div>
-            </article>
+            </div>
           ))}
         </div>
       </Section>

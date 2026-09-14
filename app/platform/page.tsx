@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { ParticleWave } from "@/components/ui/particle-wave";
 import { PageShell } from "@/components/velorah/page-shell";
+import { APP_URL } from "@/lib/site";
 import {
   Card,
   CardGrid,
@@ -179,7 +180,7 @@ export default function PlatformPage() {
       <CtaBand
         title="Start your practice"
         body="Set up in under 5 minutes. No credit card required."
-        primary={{ label: "Get Started Free", href: "#contact" }}
+        primary={{ label: "Get Started", href: APP_URL }}
         secondary={{ label: "Explore the Modules", href: "/modules" }}
       />
     </PageShell>

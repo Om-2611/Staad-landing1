@@ -183,6 +183,30 @@ export function StatRow({
 }
 
 /** Closing call-to-action band shared by the interior pages. */
+/**
+ * `next/link` is for routing between pages of this app; an absolute URL needs a
+ * plain anchor. Lets a CtaBand point at either without the caller caring.
+ */
+function CtaLink({
+  href,
+  className,
+  children,
+}: {
+  href: string;
+  className: string;
+  children: React.ReactNode;
+}) {
+  return /^https?:\/\//.test(href) ? (
+    <a href={href} className={className}>
+      {children}
+    </a>
+  ) : (
+    <Link href={href} className={className}>
+      {children}
+    </Link>
+  );
+}
+
 export function CtaBand({
   title,
   body,
@@ -204,19 +228,19 @@ export function CtaBand({
           {body}
         </p>
         <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
-          <Link
+          <CtaLink
             href={primary.href}
             className="liquid-glass rounded-full px-10 py-4 text-sm text-foreground transition-transform hover:scale-[1.03]"
           >
             {primary.label}
-          </Link>
+          </CtaLink>
           {secondary ? (
-            <Link
+            <CtaLink
               href={secondary.href}
               className="rounded-full border border-border px-10 py-4 text-sm text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
             >
               {secondary.label}
-            </Link>
+            </CtaLink>
           ) : null}
         </div>
       </div>
