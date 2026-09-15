@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { APP_URL } from "@/lib/site";
+import { GET_STARTED_URL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 import { Wordmark } from "./primitives";
@@ -97,7 +97,7 @@ export function Navbar({
       </div>
 
       <a
-        href={APP_URL}
+        href={GET_STARTED_URL}
         className="liquid-glass hidden rounded-full px-6 py-2.5 text-sm text-foreground transition-transform hover:scale-[1.03] md:inline-block"
       >
         Get Started
@@ -137,7 +137,7 @@ export function Navbar({
         ))}
 
         <a
-          href={APP_URL}
+          href={GET_STARTED_URL}
           onClick={() => setOpen(false)}
           className="liquid-glass mt-2 block rounded-xl px-4 py-3 text-center text-base text-foreground"
         >

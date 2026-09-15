@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { APP_URL } from "@/lib/site";
+import { GET_STARTED_URL } from "@/lib/site";
 
 import { Navbar } from "./navbar";
 
@@ -62,7 +62,7 @@ export function Hero({
         </p>
 
         <a
-          href={APP_URL}
+          href={GET_STARTED_URL}
           className="animate-fade-rise-delay-2 liquid-glass mt-12 cursor-pointer rounded-full px-14 py-5 text-base text-foreground transition-transform hover:scale-[1.03]"
         >
           Get Started

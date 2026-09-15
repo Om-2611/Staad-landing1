@@ -10,7 +10,7 @@ import {
   Section,
   StatRow,
 } from "@/components/velorah/page-sections";
-import { APP_URL } from "@/lib/site";
+import { GET_STARTED_URL } from "@/lib/site";
 
 const MODULES_VIDEO =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_074625_a81f018a-956b-43fb-9aee-4d1508e30e6a.mp4";
@@ -207,7 +207,7 @@ export default function ModulesPage() {
       <CtaBand
         title="Explore the modules"
         body="Every module is built for a specific condition, and appears on both screens the moment a therapist launches it."
-        primary={{ label: "Get Started", href: APP_URL }}
+        primary={{ label: "Get Started", href: GET_STARTED_URL }}
         secondary={{ label: "See the platform", href: "/platform" }}
       />
     </PageShell>
