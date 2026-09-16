@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { ParticleWave } from "@/components/ui/particle-wave";
 import CardSwap, { Card } from "@/components/velorah/card-swap";
 import { ModuleGallery } from "@/components/velorah/module-gallery";
+import { ModuleMotif } from "@/components/velorah/module-motif";
 import { PageShell } from "@/components/velorah/page-shell";
 import {
   CtaBand,
@@ -21,84 +22,120 @@ export const metadata: Metadata = {
     "A growing library of interactive therapy activities, organised by the conditions they support.",
 };
 
+/**
+ * Mirrors the gallery list in `module-gallery.tsx` — same module names, same
+ * condition against each one, so a module added to one belongs in the other.
+ *
+ * `tint` is an unbracketed RGB triple, used at low alpha for the card's corner
+ * wash. It only distinguishes one condition from the next; the page stays
+ * essentially monochrome.
+ */
 const CATEGORIES: {
-  index: string;
   icon: string;
   name: string;
-  lede: string;
+  tint: string;
   modules: { name: string; body: string }[];
 }[] = [
   {
-    index: "01",
     icon: "⚡",
     name: "ADHD",
-    lede: "Attention, impulse control and working memory.",
+    tint: "251, 191, 36",
     modules: [
       {
         name: "Virtual Maze",
         body: "Real-time maze navigation for sustained attention, planning and impulse control.",
       },
       {
-        name: "Talking Calculator",
-        body: "Voice-driven arithmetic combining speech, listening and working memory.",
+        name: "N-Back Challenge",
+        body: "Working-memory task where the client matches each item to the one N steps back.",
       },
       {
-        name: "Bubble Splash",
-        body: "Calming focus task where the client pops bubbles in time with breath cues.",
+        name: "Simon Says",
+        body: "Sequence recall and impulse control — follow the pattern, hold back on the wrong cue.",
       },
     ],
   },
   {
-    index: "02",
     icon: "📚",
     name: "SLD",
-    lede: "Dyslexia, dyscalculia, reading and writing challenges.",
+    tint: "56, 189, 248",
     modules: [
       {
-        name: "Digital Sand Tray",
-        body: "Virtual sand tray for symbolic expression and self-representation.",
+        name: "Word Building",
+        body: "Phonics-first word construction activity for dyslexia.",
       },
       {
         name: "Whack-A-Mole Math",
         body: "Fast-paced arithmetic game that builds numerical fluency.",
       },
       {
-        name: "Word Building",
-        body: "Phonics-first word construction activity for dyslexia.",
+        name: "Bubble Splash",
+        body: "Calming focus task where the client pops bubbles in time with breath cues.",
+      },
+      {
+        name: "Pixel Art Coding",
+        body: "Grid-based sequencing activity that builds step-by-step instruction skills.",
       },
     ],
   },
   {
-    index: "03",
     icon: "💙",
     name: "Anxiety & Depression",
-    lede: "Grounding, emotional regulation and cognitive reframing.",
+    tint: "129, 140, 248",
     modules: [
       {
-        name: "Box Popping",
-        body: "Somatic stress-release activity — client taps to pop boxes on screen.",
+        name: "Worry Vault",
+        body: "Worry externalisation tool — the client sets a worry down and locks it away.",
       },
       {
         name: "Emotional Charades",
         body: "Non-verbal emotion expression game.",
       },
-      { name: "Worry Box", body: "CBT-inspired worry externalisation tool." },
+      {
+        name: "Grounding Challenge",
+        body: "Sensory grounding exercise for bringing attention back to the present moment.",
+      },
     ],
   },
   {
-    index: "04",
     icon: "🧩",
     name: "Intellectual Disability",
-    lede: "Life skills, sequencing and functional learning.",
+    tint: "52, 211, 153",
     modules: [
+      {
+        name: "Virtual Shop",
+        body: "Functional life-skills activity — client shops, makes change.",
+      },
       {
         name: "Drag Drop Sorting",
         body: "Categorisation activity where the client sorts objects.",
       },
-      { name: "Story Sequencing", body: "Narrative ordering task." },
+    ],
+  },
+  {
+    icon: "🌿",
+    name: "General Therapy",
+    tint: "45, 212, 191",
+    modules: [
       {
-        name: "Virtual Shop",
-        body: "Functional life-skills activity — client shops, makes change.",
+        name: "Emotion Wheel",
+        body: "Emotion identification activity that widens the client's feelings vocabulary.",
+      },
+      {
+        name: "Thought Challenger",
+        body: "CBT reframing activity — test an unhelpful thought against the evidence.",
+      },
+      {
+        name: "Defusion River",
+        body: "ACT defusion exercise — let thoughts float past instead of holding on to them.",
+      },
+      {
+        name: "Micro Quest Board",
+        body: "Behavioural activation board that breaks goals into small, doable quests.",
+      },
+      {
+        name: "Facts vs Feelings",
+        body: "Sorting activity that separates what is factual from what is felt.",
       },
     ],
   },
@@ -125,7 +162,7 @@ export default function ModulesPage() {
       <Section className="relative z-10 -mt-24 pt-0 md:-mt-32 md:pt-0">
         <StatRow
           stats={[
-            { value: "12+", label: "Live modules" },
+            { value: "17", label: "Live modules" },
             { value: "5", label: "Conditions supported" },
             { value: "100%", label: "Real-time sync" },
           ]}
@@ -161,7 +198,7 @@ export default function ModulesPage() {
           id="modules"
           eyebrow="01 · The library"
           title="Every module in one deck."
-          lede="Twelve interactive activities. Click the top card to bring up the next one."
+          lede="Seventeen interactive activities. Click the top card to bring up the next one."
         >
           <div className="card-swap-centered relative mx-auto h-[560px] w-full max-w-5xl sm:h-[680px] lg:h-[780px]">
             <CardSwap
@@ -174,7 +211,24 @@ export default function ModulesPage() {
               {CATEGORIES.flatMap((category) =>
                 category.modules.map((module) => (
                   <Card key={`${category.name} · ${module.name}`}>
-                    <article className="flex h-full flex-col justify-center p-12">
+                    {/* A wash in the condition's colour, kept faint enough that
+                        the deck still reads as black. */}
+                    <div
+                      aria-hidden="true"
+                      className="absolute inset-0"
+                      style={{
+                        background: `radial-gradient(120% 100% at 100% 0%, rgba(${category.tint}, 0.16), transparent 62%)`,
+                      }}
+                    />
+
+                    {/* Line drawing of the activity, sized past the card edge so
+                        it reads as texture rather than a pasted-on icon. */}
+                    <ModuleMotif
+                      name={module.name}
+                      className="pointer-events-none absolute -bottom-8 -right-8 h-64 w-64 text-white/[0.07]"
+                    />
+
+                    <article className="relative flex h-full flex-col justify-center p-12">
                       <p className="mb-4 text-xs uppercase tracking-[0.3em] text-white/60">
                         <span aria-hidden="true" className="mr-2">
                           {category.icon}
@@ -184,7 +238,7 @@ export default function ModulesPage() {
                       <h3 className="mb-4 text-4xl leading-[1.05] tracking-[-1px] text-white [font-family:var(--font-velorah-serif)]">
                         {module.name}
                       </h3>
-                      <p className="text-base leading-relaxed text-white/70">
+                      <p className="max-w-sm text-base leading-relaxed text-white/70">
                         {module.body}
                       </p>
                     </article>
