@@ -32,6 +32,19 @@
   cursor: pointer;
 }
 
+/*
+ * ...and only it shows the "click for next" hint. On the cards behind, the
+ * hint would be a promise a click there doesn't keep.
+ */
+.card .card-next-hint {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card.card--front .card-next-hint {
+  opacity: 1;
+}
+
 @media (max-width: 768px) {
   .card-swap-container {
     transform: scale(0.75) translate(25%, 25%);

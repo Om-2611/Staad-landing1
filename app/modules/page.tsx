@@ -242,6 +242,15 @@ export default function ModulesPage() {
                         {module.body}
                       </p>
                     </article>
+
+                    {/* Faded in by card-swap.css on the front card only, since
+                        that is the only one a click advances. */}
+                    <span className="card-next-hint pointer-events-none absolute bottom-8 right-10 text-[11px] uppercase tracking-[0.2em] text-white/45">
+                      Click for next
+                      <span aria-hidden="true" className="ml-2">
+                        →
+                      </span>
+                    </span>
                   </Card>
                 )),
               )}
